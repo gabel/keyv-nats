@@ -2,7 +2,7 @@
 
 > NATS storage adapter for the awesome [keyv](https://github.com/jaredwray/keyv).
 
-[![build](https://github.com/gabel/keyv-nats/actions/workflows/tests.yaml/badge.svg)](https://github.com/jgabel/keyv-nats/actions/workflows/tests.yaml)
+[![build](https://github.com/gabel/keyv-nats/actions/workflows/tests.yaml/badge.svg)](https://github.com/gabel/keyv-nats/actions/workflows/tests.yaml)
 [![codecov](https://codecov.io/gh/gabel/keyv-nats/branch/main/graph/badge.svg?token=bRzR3RyOXZ)](https://codecov.io/gh/gabel/keyv-nats)
 [![GitHub license](https://img.shields.io/github/license/gabel/keyv-nats)](https://github.com/gabel/keyv-nats/blob/master/LICENSE)
 [![npm](https://img.shields.io/npm/dm/@gabel/keyv-nats)](https://npmjs.com/package/@gabel/keyv-nats)
