@@ -1,0 +1,36 @@
+{
+  "name": "keyv-nats",
+  "version": "0.0.1",
+  "description": "NATS storage adapter for Keyv",
+  "main": "dist/index.js",
+  "scripts": {
+    "test": "jest --roots src",
+    "build": "tsc -p tsconfig.dist.json"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gabel/keyv-nats.git"
+  },
+  "keywords": [
+    "keyv",
+    "storage",
+    "nats"
+  ],
+  "author": "Martin Fischer <gabeldeluxe@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/gabel/keyv-nats/issues"
+  },
+  "homepage": "https://github.com/gabel/keyv-nats#readme",
+  "devDependencies": {
+    "@types/jest": "^29.5.1",
+    "jest": "^29.5.0",
+    "testcontainers": "^9.8.0",
+    "ts-jest": "^29.1.0",
+    "typescript": "^5.0.4"
+  },
+  "dependencies": {
+    "keyv": "^4.5.2",
+    "nats": "^2.14.0"
+  }
+}
