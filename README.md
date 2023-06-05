@@ -3,9 +3,9 @@
 > NATS storage adapter for the awesome [keyv](https://github.com/jaredwray/keyv).
 
 [![build](https://github.com/gabel/keyv-nats/actions/workflows/tests.yaml/badge.svg)](https://github.com/gabel/keyv-nats/actions/workflows/tests.yaml)
-[![codecov](https://codecov.io/gh/gabel/keyv-nats/branch/main/graph/badge.svg?token=bRzR3RyOXZ)](https://codecov.io/gh/gabel/keyv-nats)
+[![codecov](https://codecov.io/github/gabel/keyv-nats/branch/main/graph/badge.svg?token=0Z1LP396MP)](https://codecov.io/github/gabel/keyv-nats)
 [![GitHub license](https://img.shields.io/github/license/gabel/keyv-nats)](https://github.com/gabel/keyv-nats/blob/master/LICENSE)
-[![npm](https://img.shields.io/npm/dm/@gabel/keyv-nats)](https://npmjs.com/package/@gabel/keyv-nats)
+[![npm](https://img.shields.io/npm/dm/@gabel/keyv-nats)](https://npmjs.com/package/keyv-nats)
 
 ## Installation
 
