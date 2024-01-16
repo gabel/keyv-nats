@@ -2,6 +2,8 @@ import Keyv from 'keyv'
 import KeyvNats from "./index";
 import { NatsConnectionOptions, NatsContainer, StartedNatsContainer } from "testcontainers";
 import { NatsConnectionImpl } from "nats/lib/nats-base-client/nats";
+import {JetStreamClientImpl} from "nats/lib/jetstream/jsclient";
+import {Bucket} from "nats/lib/jetstream/kv";
 
 let options: NatsConnectionOptions
 let container: StartedNatsContainer
@@ -23,13 +25,15 @@ afterAll(async () => {
     await container.stop()
 })
 
-describe('Nats Keyv storage apapter',  () => {
+describe('Nats Keyv storage adapter',  () => {
     test('Basic initialization of NATS keyv adapter connection to NATS (using testcontainers)', async () => {
         const keyvNats = new KeyvNats(options);
         expect(keyvNats).toBeInstanceOf(KeyvNats);
 
         await keyvNats.connect();
         expect(keyvNats.client).toBeInstanceOf(NatsConnectionImpl);
+        expect(keyvNats.jetStream).toBeInstanceOf(JetStreamClientImpl);
+        expect(keyvNats.keyValueBucket).toBeInstanceOf(Bucket);
         await keyvNats.disconnect();
     })
 
@@ -116,11 +120,17 @@ describe('Nats Keyv storage apapter',  () => {
         await keyvNats.connect();
         const keyv = new Keyv({ store: keyvNats })
 
-        const key = 'foo'
-        const value = 'bar'
+        const jsonKey = {
+            url : '/organization/S123456789'
+        }
+        const key = JSON.stringify(jsonKey)
+        const value = {
+            "id": "123456789",
+            "businessPartnerType": "organization",
+        }
         await keyv.set(key, value)
 
-        expect(await keyv.get(key)).toBe(value)
-        await keyv.disconnect();
+        expect(await keyv.get(key)).toEqual(value)
+        await keyvNats.disconnect();
     })
 })

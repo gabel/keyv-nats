@@ -30,7 +30,7 @@ await keyv.set(key, value)
 
 await keyv.get(key)
 
-keyv.disconnect();
+keyvNats.disconnect();
 ```
 
 ## Tests

@@ -1,6 +1,7 @@
 import { EventEmitter } from 'events';
 import type { Store } from 'keyv';
 import { connect, NatsConnection, ConnectionOptions, JetStreamClient, KV, StringCodec } from "nats";
+import seedrandom from "seedrandom";
 
 type KeyvNatsOptions = ConnectionOptions & {
     ttl?: number,
@@ -11,14 +12,14 @@ class KeyvNats<Value = any> extends EventEmitter implements Store<Value> {
     public ttlSupport = true;
     public client: NatsConnection | undefined = undefined
     public opts: KeyvNatsOptions = {servers: 'localhost:4222'}
-    private jetStream: JetStreamClient | undefined = undefined
+    public jetStream: JetStreamClient | undefined = undefined
     private namespace: string = 'keyv'
     /**
      * Time to live in milliseconds
      * @private ttl
      */
     private ttl: number = 0
-    private keyValueBucket: KV | undefined
+    public keyValueBucket: KV | undefined
 
     constructor(options?: KeyvNatsOptions) {
         super();
@@ -63,7 +64,7 @@ class KeyvNats<Value = any> extends EventEmitter implements Store<Value> {
 
     delete(key: string): boolean | Promise<boolean> {
         if (this.keyValueBucket)
-            return this.keyValueBucket.delete(key).then(() => {
+            return this.keyValueBucket.delete(getRandomisedKey(key)).then(() => {
                 return true
             })
 
@@ -73,7 +74,7 @@ class KeyvNats<Value = any> extends EventEmitter implements Store<Value> {
     get(key: string): Promise<Value | undefined> | Value | undefined {
         if (this.keyValueBucket)
             // @ts-expect-error - Value needs to be number, string or buffer
-            return this.keyValueBucket.get(key.replace(":","_")).then((kvValue) => {
+            return this.keyValueBucket.get(getRandomisedKey(key)).then((kvValue) => {
                 if (kvValue) {
                     const value = StringCodec().decode(kvValue.value)
                     return value ? value : undefined
@@ -88,10 +89,18 @@ class KeyvNats<Value = any> extends EventEmitter implements Store<Value> {
     set(key: string, value: Value): any {
         if (this.keyValueBucket)
             // @ts-expect-error - Value needs to be number, string or buffer
-            return this.keyValueBucket.put(key.replace(":","_"), StringCodec().encode(value))
+            return this.keyValueBucket.put(getRandomisedKey(key), StringCodec().encode(value))
 
         return undefined
     }
+}
+
+/**
+ * Key's can be complex jsons. This function generates a random but unique int 32 value for the given json.
+ * This makes the key valid to store in the NATS's kv bucket.
+ */
+const getRandomisedKey = (key: string) => {
+    return seedrandom(key.replace(":","_")).int32().toString()
 }
 
 export = KeyvNats

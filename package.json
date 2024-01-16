@@ -30,7 +30,9 @@
     "typescript": "^5.0.4"
   },
   "dependencies": {
-    "keyv": "^4.5.2",
-    "nats": "^2.14.0"
+    "@types/seedrandom": "^3.0.8",
+    "keyv": "^4.5.4",
+    "nats": "^2.14.0",
+    "seedrandom": "^3.0.5"
   }
 }
