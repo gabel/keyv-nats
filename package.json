@@ -1,6 +1,6 @@
 {
   "name": "keyv-nats",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "NATS storage adapter for Keyv",
   "main": "dist/index.js",
   "scripts": {
@@ -23,16 +23,16 @@
   },
   "homepage": "https://github.com/gabel/keyv-nats#readme",
   "devDependencies": {
-    "@types/jest": "^29.5.1",
-    "jest": "^29.5.0",
-    "testcontainers": "^9.8.0",
-    "ts-jest": "^29.1.0",
-    "typescript": "^5.0.4"
+    "@types/jest": "^29.5.11",
+    "jest": "^29.5.11",
+    "testcontainers": "^9.12.0",
+    "ts-jest": "^29.1.2",
+    "typescript": "^5.3.3"
   },
   "dependencies": {
     "@types/seedrandom": "^3.0.8",
     "keyv": "^4.5.4",
-    "nats": "^2.14.0",
+    "nats": "^2.19.0",
     "seedrandom": "^3.0.5"
   }
 }
