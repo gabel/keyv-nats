@@ -1,5 +1,5 @@
-import { EventEmitter } from 'events';
-import type { Store } from 'keyv';
+import { EventEmitter } from 'node:events';
+import Keyv, { Store } from 'keyv';
 import { connect, NatsConnection, ConnectionOptions, JetStreamClient, KV, StringCodec } from "nats";
 import seedrandom from "seedrandom";
 
@@ -9,21 +9,21 @@ type KeyvNatsOptions = ConnectionOptions & {
 }
 
 class KeyvNats<Value = any> extends EventEmitter implements Store<Value> {
-    public ttlSupport = true;
     public client: NatsConnection | undefined = undefined
     public opts: KeyvNatsOptions = {servers: 'localhost:4222'}
     public jetStream: JetStreamClient | undefined = undefined
-    private namespace: string = 'keyv'
+    private readonly namespace: string = 'keyv'
+
     /**
      * Time to live in milliseconds
      * @private ttl
      */
-    private ttl: number = 0
+    private readonly ttl: number = 0
     public keyValueBucket: KV | undefined
 
     constructor(options?: KeyvNatsOptions) {
         super();
-        this.opts = options || this.opts
+        this.opts = options ?? this.opts
         this.namespace = this.opts.namespace || this.namespace
         this.ttl = this.opts.ttl || this.ttl
     }
@@ -47,7 +47,7 @@ class KeyvNats<Value = any> extends EventEmitter implements Store<Value> {
     }
 
     public async disconnect() {
-        return this.client !== undefined ? await this.client.close() : false;
+        return this.client === undefined ? false : await this.client.close();
     }
 
     /**
@@ -77,9 +77,9 @@ class KeyvNats<Value = any> extends EventEmitter implements Store<Value> {
             return this.keyValueBucket.get(getRandomisedKey(key)).then((kvValue) => {
                 if (kvValue) {
                     const value = StringCodec().decode(kvValue.value)
-                    return value ? value : undefined
+                    return value || undefined
                 }
-            }).catch((reason) => {
+            }).catch(() => {
                 // catch get for the clear all case, when bucket is not re-created yet
             })
 
@@ -93,10 +93,18 @@ class KeyvNats<Value = any> extends EventEmitter implements Store<Value> {
 
         return undefined
     }
+
+    /**
+     * Returns a Keyv instance that uses this store.
+     */
+    public keyv(this: this): Keyv {
+        // @ts-expect-error - store type is not fully compatible
+        return new Keyv({ store: this })
+    }
 }
 
 /**
- * Key's can be complex jsons. This function generates a random but unique int 32 value for the given json.
+ * Keys can be complex JSONs. This function generates a random but unique int 32 value for the given JSON.
  * This makes the key valid to store in the NATS's kv bucket.
  */
 const getRandomisedKey = (key: string) => {

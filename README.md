@@ -22,6 +22,7 @@ import KeyvNats from 'keyv-nats'
 const keyvNats = new KeyvNats({ servers: "localhost:4222" });
 await keyvNats.connect();
 const keyv = new Keyv({ store: keyvNats })
+// or simply by calling: `const keyv = keyvNats.keyv()`
 
 const key = 'foo'
 const value = 'bar'
