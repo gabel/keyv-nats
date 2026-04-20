@@ -1,4 +1,3 @@
-import Keyv from 'keyv'
 import KeyvNats from "./index";
 import { NatsConnectionOptions, NatsContainer, StartedNatsContainer } from "testcontainers";
 import { NatsConnectionImpl } from "nats/lib/nats-base-client/nats";
@@ -118,7 +117,7 @@ describe('Nats Keyv storage adapter',  () => {
     test('Usage as keyv adapter', async () => {
         const keyvNats = new KeyvNats(options);
         await keyvNats.connect();
-        const keyv = new Keyv({ store: keyvNats })
+        const keyv = keyvNats.keyv()
 
         const jsonKey = {
             url : '/organization/S123456789'
